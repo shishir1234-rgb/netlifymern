@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Define CORS options
 const corsOptions = {
-  origin: ['http://localhost:5173','http://localhost:3000',"https://66d46a479886f0341f2f8bd9--playful-twilight-402273.netlify.app","https://66d46ca11cdaae364595418a--lighthearted-florentine-70ae7a.netlify.app/"], // Update with your allowed origin
+  origin: ['http://localhost:5173','http://localhost:3000',"https://66d46a479886f0341f2f8bd9--playful-twilight-402273.netlify.app","https://66d46ca11cdaae364595418a--lighthearted-florentine-70ae7a.netlify.app/","https://66d46f1f49896405741495a6--lighthearted-florentine-70ae7a.netlify.app/"], // Update with your allowed origin
   methods: ['GET', 'POST','PUT',"DELETE"],
   credentials: true,
 };
