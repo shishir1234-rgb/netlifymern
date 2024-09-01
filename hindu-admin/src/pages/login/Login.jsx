@@ -21,7 +21,7 @@ const Login = () => {
     setError(null); // Clear any previous error messages
 
     try {
-      const response = await axios.post("http://localhost:4000/public/admin/adminLogin", {
+      const response = await axios.post("https://hindu-backend.onrender.com/public/admin/adminLogin", {
         email: username,
         adminPassword: password,
       });

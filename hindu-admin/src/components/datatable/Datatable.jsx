@@ -42,7 +42,7 @@ const Datatable = () => {
 
   const handleDelete = (id) => {
     // setData(data.filter((item) => item.id !== id));
-    axios.delete("http://localhost:4000/public/admin/delete/company/"+id)
+    axios.delete("https://hindu-backend.onrender.com/public/admin/delete/company/"+id)
     .then(res=>{alert(res?.data?.message);setRefreshList(!refreshList)})
     .catch(err=>console.log(err.message))
   };
@@ -123,9 +123,9 @@ const Datatable = () => {
   ];
 
   useEffect(()=>{
-      axios.get("http://localhost:4000/public/admin/allComp")
+      axios.get("https://hindu-backend.onrender.com/public/admin/allComp")
       .then(res=>{
-        const tableData=res.data.map((item,idx)=>{return {...item,id:idx+1}})
+        const tableData=res.data.data.map((item,idx)=>{return {...item,id:idx+1}})
         setData(tableData)})
       .catch(err=>console.log(err))
   },[refreshList]);

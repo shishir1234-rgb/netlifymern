@@ -33,7 +33,7 @@ const ChangePasswordPopup = ({ email,closePopup }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:4000/public/admin/adminChangePass', {
+      const response = await axios.post('https://hindu-backend.onrender.com/public/admin/adminChangePass', {
         email: email,
         otp: otp.join(''), // Join the OTP array into a single string
         newPassword: newPassword,

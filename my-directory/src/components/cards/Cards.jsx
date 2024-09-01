@@ -38,7 +38,7 @@ const Cards = ({ companies }) => {
 
 
   useEffect(()=>{
-    axios.get("http://localhost:4000/public/company/cardData")
+    axios.get("https://hindu-backend.onrender.com/public/company/cardData")
     .then(res=>{
       const tableData=res.data.data.map((item,idx)=>{return {...item,id:idx+1}})
       setData(tableData)})

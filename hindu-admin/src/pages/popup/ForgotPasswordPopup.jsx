@@ -12,7 +12,7 @@ const ForgotPasswordPopup = ({ closePopup }) => {
     setError(null); // Clear any previous error messages
 
     try {
-      const response = await axios.post('http://localhost:4000/public/admin/adminForgot', {
+      const response = await axios.post('https://hindu-backend.onrender.com/public/admin/adminForgot', {
         email: email,
       });
 
