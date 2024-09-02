@@ -8,8 +8,8 @@ const fs = require('fs');
 transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.Gmail_user2,
-    pass: process.env.Gmail_pass2,
+    user: process.env.Gmail_user3,
+    pass: process.env.Gmail_pass3,
   },
 });
 // console.log('Transporter created:', transporter); // Debug line
