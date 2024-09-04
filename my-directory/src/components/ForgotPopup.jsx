@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios'; // Import axios for API requests
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios"; // Import axios for API requests
+import { useNavigate } from "react-router-dom";
 
 const ForgotPasswordPopup = ({ onClose }) => {
-  const [email, setEmail] = useState('');
-  const navigate = useNavigate(); 
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/public/company/forgotPass', { email });
+      const response = await axios.post(
+        "https://hindu-backend.onrender.com/public/company/forgotPass",
+        { email }
+      );
       alert(response.data.message); // Show success message
-      setEmail(''); // Clear the form
-      navigate('/change-password', { state: { email } });
-
+      setEmail(""); // Clear the form
+      navigate("/change-password", { state: { email } });
     } catch (error) {
-      console.error('Error during password reset request:', error.response?.data?.message, error);
-      alert('Password reset failed: ' + error.response?.data?.message || error.message); // Show error message
+      console.error(
+        "Error during password reset request:",
+        error.response?.data?.message,
+        error
+      );
+      alert(
+        "Password reset failed: " + error.response?.data?.message ||
+          error.message
+      ); // Show error message
     }
   };
 
@@ -38,7 +47,9 @@ const ForgotPasswordPopup = ({ onClose }) => {
         <div className="flex-1 p-4 relative">
           <h2 className="text-2xl font-bold mb-4">Forgot Password</h2>
 
-          <p className="text-gray-700 mb-4 text-center">Enter your email address to reset your password.</p>
+          <p className="text-gray-700 mb-4 text-center">
+            Enter your email address to reset your password.
+          </p>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -58,8 +69,6 @@ const ForgotPasswordPopup = ({ onClose }) => {
               Reset Password
             </button>
           </form>
-        
-       
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@ const ContactForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:4000/public/admin/submit-msg', formData);  // Adjust the API endpoint as needed
+      const response = await axios.post('https://hindu-backend.onrender.com/public/admin/submit-msg', formData);  // Adjust the API endpoint as needed
       if (response.status === 200) {
         setAlertMessage('Message submitted successfully!Wait for the call .');
         setFormData({ name: '', phone: '', email: '', comment: '' });

@@ -21,7 +21,7 @@ const ChangePassword = ({ onClose }) => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:4000/public/company/passChange', { email, newPassword, otp });
+      const response = await axios.post('https://hindu-backend.onrender.com/public/company/passChange', { email, newPassword, otp });
       setSuccess(response.data.message);
       setEmail('');
       setNewPassword('');

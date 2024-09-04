@@ -13,15 +13,19 @@ const LoginPopup = ({ onClose }) => {
   const [compPassword, setCompPassword] = useState('');
   const [showForgotPopup, setShowForgotPopup] = useState(false); 
 
+
+  const navigate = useNavigate(); 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/public/company/Login', { email, compPassword });
+      const response = await axios.post('https://hindu-backend.onrender.com/public/company/Login', { email, compPassword });
       localStorage.setItem('companyId', JSON.stringify(response.data.companyId));
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('sessionData', JSON.stringify(response.data.sessionsDat));
 
       alert(response.data.message); 
+      navigate('/listing')
       setEmail(''); 
       setCompPassword('');
     } catch (error) {

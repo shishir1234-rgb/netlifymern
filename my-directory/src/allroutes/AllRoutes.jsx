@@ -20,6 +20,7 @@ const AllRoutes = () => {
       <Route exact path="/change-password" element={<ChangePassword />} />
       <Route exact path="/data-cards" element={<DataCardPage />} />
       <Route exact path="/profile" element={<ProfilePage />} />
+      
       </Routes>
     </Router>
   );

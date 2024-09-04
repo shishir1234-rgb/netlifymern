@@ -6,11 +6,8 @@ import aboutimg from '../../src/assets/images/about.jpg';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
-
-
 const SignUpPopup = ({ onClose }) => {
-  const navigate = useNavigate(); 
-
+  const navigate = useNavigate();
   // State to hold form input values
   const [formData, setFormData] = useState({
     firstName: '',
@@ -20,10 +17,8 @@ const SignUpPopup = ({ onClose }) => {
     contactNo:'',
     compPassword: '',
   });
-
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
   // Function to handle input changes
   const handleChange = (e) => {
     setFormData({
@@ -31,15 +26,13 @@ const SignUpPopup = ({ onClose }) => {
       [e.target.name]: e.target.value,
     });
   };
-
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-
     try {
-      const response = await axios.post('http://localhost:4000/public/company/compRegister', formData);
+      const response = await axios.post('https://hindu-backend.onrender.com/public/company/compRegister', formData);
       if (response.status === 201) {
         setSuccess('User registered successfully');
         // Clear the form after successful submission
@@ -52,15 +45,17 @@ const SignUpPopup = ({ onClose }) => {
           compPassword: '',
         });
         alert('Company registered successfully. Check mail for login details.');
-        navigate('/listing',  {state: {
-          email: formData.email,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          compName: formData.compName,
-        }});
+        // navigate('/listing',  {state: {
+        //   email: formData.email,
+        //   firstName: formData.firstName,
+        //   lastName: formData.lastName,
+        //   compName: formData.compName,
+        // }});
+        navigate('/login', { state: { email } });
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'Registration failed');
+     console.error("error",error)
+      setError(error.response?.data?.message);
     }
     const handleGoogleSignUp = useGoogleLogin({
       onSuccess: async (tokenResponse) => {
@@ -68,7 +63,6 @@ const SignUpPopup = ({ onClose }) => {
           const response = await axios.post('http://localhost:4000/public/company/googleRegister', {
             tokenId: tokenResponse.access_token,
           });
-  
           if (response.status === 201) {
             alert('Company registered successfully.');
             navigate('/listing');
@@ -83,7 +77,6 @@ const SignUpPopup = ({ onClose }) => {
       },
     });
   };
-
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300 ease-in-out">
       <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full min-h-[400px] flex">
@@ -95,13 +88,10 @@ const SignUpPopup = ({ onClose }) => {
         >
           <FontAwesomeIcon icon={faTimes} size="lg" />
         </button>
-
         {/* Form Section */}
         <div className="flex-1 p-4 relative">
           <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-
           <p className="text-gray-700 mb-4 text-center">Please enter your details to sign up.</p>
-
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
@@ -215,5 +205,4 @@ const SignUpPopup = ({ onClose }) => {
     </div>
   );
 };
-
 export default SignUpPopup;
