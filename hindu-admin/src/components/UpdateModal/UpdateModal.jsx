@@ -25,7 +25,11 @@ const UpdateModal = ({ isOpen, onRequestClose, user, onUpdate }) => {
     setLoading(true);
     setError("");
     try {
+<<<<<<< HEAD
       const response = await axios.post("https://hindu-backend.onrender.com/public/admin/update/company", formData);
+=======
+      const response = await axios.post("http://localhost:4000/public/admin/update/company", formData);
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
       if (response.data.success) {
         alert(response.data.message);
         onUpdate(formData);

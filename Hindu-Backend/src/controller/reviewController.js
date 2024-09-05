@@ -8,7 +8,11 @@ exports.userReview = async (req,res)=>{
 
     try {
         const { companyId, reviewerName, rating, comment } = req.body;
+<<<<<<< HEAD
         // console.log('req body:',req.body);
+=======
+        console.log('req body:',req.body);
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 
         const company = await Company.findById(companyId);
         if (company) {

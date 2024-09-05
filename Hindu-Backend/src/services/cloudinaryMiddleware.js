@@ -13,6 +13,7 @@ cloudinary.config({
 // Configure Cloudinary Storage
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
+<<<<<<< HEAD
     // params: {
     //     folder: 'company_images', // Optional: specify the folder in Cloudinary
     //     allowed_formats: ['jpg', 'png', 'jpeg', 'mp4'],
@@ -33,10 +34,21 @@ const storage = new CloudinaryStorage({
             public_id: `${Date.now()}-${file.originalname}`
         };
     }
+=======
+    params: {
+        folder: 'company_images', // Optional: specify the folder in Cloudinary
+        allowed_formats: ['jpg', 'png', 'jpeg', 'mp4'],
+        resource_type: 'auto', // Automatically detect the file type (image or video)
+    },
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 });
 
 // Initialize multer with Cloudinary storage
 const upload = multer({ storage: storage });
 
+<<<<<<< HEAD
 
+=======
+// Export the middleware
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 module.exports = upload;

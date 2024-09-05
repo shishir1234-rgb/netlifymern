@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import './Profile.css';
 
@@ -45,12 +46,46 @@ const Profile = () => {
             <InfoItem label="Pincode" value={user.pincode} />
             <InfoItem label="Country" value={user.country} />
           </div>
+=======
+import React, { useEffect } from 'react';
+import './Profile.css';
+
+const Profile = () => {
+const [user,setUser]=React.useState({});
+
+useEffect(()=>{
+
+    const userData=JSON.parse(localStorage.getItem("companyId"));
+    setUser(userData);
+
+},[]);
+
+  return (
+    <div className="profile-container">
+      <div className="profile-left">
+        <div className="profile-image">
+          {/* Placeholder image, replace with actual image if available */}
+          <img src="https://via.placeholder.com/150" alt="Profile" />
+        </div>
+        <div className="profile-basic-details">
+          <h2>{user.firstName} {user.lastName}</h2>
+          <p>{user.compName}</p>
+          <p>{user.status}</p>
+        </div>
+      </div>
+      <div className="profile-right">
+        <div className="profile-details">
+          <h3>Contact Information</h3>
+          <p>Email: {user.email}</p>
+          <p>Contact No: {user.contactNo}</p>
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         </div>
       </div>
     </div>
   );
 };
 
+<<<<<<< HEAD
 const InfoItem = ({ label, value }) => (
   <div className="info-item">
     <span className="info-label">{label}:</span>
@@ -59,3 +94,6 @@ const InfoItem = ({ label, value }) => (
 );
 
 export default Profile;
+=======
+export default Profile;
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825

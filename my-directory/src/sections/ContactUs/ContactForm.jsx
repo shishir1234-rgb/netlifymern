@@ -3,7 +3,11 @@ import { useDarkMode } from '../../components/DarkModeContext';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+<<<<<<< HEAD
 import contactUs from '../../assets/images/cover.png';
+=======
+import contactUs from '../../assets/images/contactUs.png';
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 import backgroundImage from '../../assets/images/contactb.jpg';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +43,11 @@ const ContactForm = () => {
     e.preventDefault();
 
     try {
+<<<<<<< HEAD
       const response = await axios.post('https://hindu-backend.onrender.com/public/admin/submit-msg', formData);  // Adjust the API endpoint as needed
+=======
+      const response = await axios.post('http://localhost:4000/public/admin/submit-msg', formData);  // Adjust the API endpoint as needed
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
       if (response.status === 200) {
         setAlertMessage('Message submitted successfully!Wait for the call .');
         setFormData({ name: '', phone: '', email: '', comment: '' });
@@ -65,7 +73,11 @@ const ContactForm = () => {
 
           {/* Image Section */}
           <div className="relative w-full lg:w-1/2 flex justify-center lg:justify-start mb-8 lg:mb-0">
+<<<<<<< HEAD
             <img src={contactUs} alt="Contact" className="w-full  rounded-lg" />
+=======
+            <img src={contactUs} alt="Contact" className="w-full max-w-md rounded-lg" />
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
           </div>
 
           {/* Form Section */}

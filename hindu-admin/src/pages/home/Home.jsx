@@ -28,8 +28,13 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+<<<<<<< HEAD
         const activeRes = await axios.get("https://hindu-backend.onrender.com/public/admin/companies?status=Active");
         const inActiveRes = await axios.get("https://hindu-backend.onrender.com/public/admin/companies?status=Inactive");
+=======
+        const activeRes = await axios.get("http://localhost:4000/public/admin/companies?status=Active");
+        const inActiveRes = await axios.get("http://localhost:4000/public/admin/companies?status=Inactive");
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 
         const activeCount = activeRes.data.count;
         const inActiveCount = inActiveRes.data.count;

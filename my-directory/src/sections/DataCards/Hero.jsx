@@ -5,10 +5,14 @@ import foggyimg from '../../assets/images/foggy.png';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 
+<<<<<<< HEAD
 const Hero = (props) => {
 
   const { message, count } = props;
 
+=======
+const Hero = () => {
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
   useEffect(() => {
     Aos.init({
       offset: 200,
@@ -42,13 +46,22 @@ const Hero = (props) => {
             data-aos='zoom-in'
             className='text-white font-bold text-4xl lg:text-5xl text-center relative z-20'
           >
+<<<<<<< HEAD
 {message}</h1>
+=======
+Discover Local Businesses
+</h1>
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 
           <p
             data-aos='zoom-in'
             className='text-white text-xl lg:text-xl text-center lg:text-justify relative z-20'
           >
+<<<<<<< HEAD
 {count}</p>
+=======
+Explore a wide range of local businesses from various categories. Whether you're looking for the best restaurants, shops, or service providers in your area, our comprehensive listings have you covered. Find the perfect business to meet your needs and connect with them easily.</p>
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         </section>
       </div>
 

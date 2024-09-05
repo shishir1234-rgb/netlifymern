@@ -13,7 +13,11 @@ exports.addMsg = async (req, res) => {
     }
 
     const { companyId, userName, userEmail, comment } = req.body;
+<<<<<<< HEAD
     // console.log('req body', req.body);
+=======
+    console.log('req body', req.body);
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
     try {
         const userMsg = new Message({
             companyId,

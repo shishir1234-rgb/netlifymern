@@ -4,6 +4,7 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 import axios from 'axios';
 import { comment } from "postcss";
+<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom';
 
 
@@ -12,6 +13,12 @@ const Contact = () => {
 
   const navigate = useNavigate();
 
+=======
+import { useNavigate } from 'react-router-dom';
+
+
+const Contact = () => {
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -39,17 +46,25 @@ const Contact = () => {
     });
   };
 
+<<<<<<< HEAD
   
 
+=======
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+<<<<<<< HEAD
 
     
 
     try {
       const response = await axios.post('https://hindu-backend.onrender.com/public/admin/submit-msg', formData);  // Adjust the API endpoint as needed
+=======
+    try {
+      const response = await axios.post('http://localhost:4000/public/admin/submit-msg', formData);  // Adjust the API endpoint as needed
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
       if (response.status === 200) {
         setAlertMessage('Message submitted successfully!');
         setFormData({ name: '', email: '', phone: '', comment: '' });
@@ -60,12 +75,15 @@ const Contact = () => {
       setAlertMessage('Error submitting message. Please try again.');
     }
   }
+<<<<<<< HEAD
 
 
   const handleClick = () => {
     navigate('/');
   }
 
+=======
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
   return (
     <div className={`${darkMode ? "bg-black text-white" : "bg-red-100 text-black"} pb-10`}>
       <section
@@ -163,12 +181,20 @@ const Contact = () => {
           >
             We’re here to help! Whether you have a question, need support, or just want to share your thoughts, feel free to reach out. Our team is dedicated to providing you with the best assistance possible. Please fill out the form below, and we’ll get back to you as soon as we can.
           </p>
+<<<<<<< HEAD
           <Link to={navigate('/contact')} 
+=======
+          <button
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
             type="button"
             className={`w-full text-md px-8 py-3 text-white font-semibold rounded-xl ${darkMode ? "bg-red-600 hover:bg-black" : "bg-red-600 hover:bg-black"}`}
           >
             For any query
+<<<<<<< HEAD
           </Link>
+=======
+          </button>
+>>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         </div>
       </section>
     </div>
