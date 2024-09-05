@@ -11,19 +11,11 @@ setupDBClient();
 const app = express();
 
 app.use(express.json());
-<<<<<<< HEAD
 app.use(express.urlencoded({ extended: true }));
 
 // Define CORS options
 const corsOptions = {
   origin: ['http://localhost:5173','http://localhost:3000'], // Update with your allowed origin
-=======
-app.use(express.urlencoded({ extended: false }));
-
-// Define CORS options
-const corsOptions = {
-  origin: ['http://localhost:5173','http://localhost:3000',"https://66d46a479886f0341f2f8bd9--playful-twilight-402273.netlify.app","https://66d46ca11cdaae364595418a--lighthearted-florentine-70ae7a.netlify.app/","https://66d46f1f49896405741495a6--lighthearted-florentine-70ae7a.netlify.app","https://66d591e1d92965eae65708f3--lighthearted-florentine-70ae7a.netlify.app"], // Update with your allowed origin
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
   methods: ['GET', 'POST','PUT',"DELETE"],
   credentials: true,
 };

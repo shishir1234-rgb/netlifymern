@@ -11,11 +11,8 @@ transporter = nodemailer.createTransport({
     user: process.env.Gmail_user3,
     pass: process.env.Gmail_pass3,
   },
-<<<<<<< HEAD
   debug: true, // Enable debug output
   logger: true // Log information to console
-=======
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 });
 // console.log('Transporter created:', transporter); // Debug line
 
@@ -69,7 +66,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-<<<<<<< HEAD
 const sendEmail = async (mailOptions) => {
   try {
     const info = await transporter.sendMail(mailOptions);
@@ -82,8 +78,5 @@ const sendEmail = async (mailOptions) => {
 };
 
 module.exports = { transporter, formatDateTime, calculateDateRange, upload, sendEmail };
-=======
-module.exports = { transporter, formatDateTime, calculateDateRange, upload };
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 
 

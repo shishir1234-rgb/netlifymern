@@ -8,11 +8,7 @@ const companySchema = new Schema({
     },
     lastName: {
         type: String,
-<<<<<<< HEAD
         // required: true
-=======
-        required: true
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
     },
     compName: {
         type: String,
@@ -88,13 +84,10 @@ const companySchema = new Schema({
         type: [String],
         // required: [true, 'image URL is required'],
     },
-<<<<<<< HEAD
     image2:{type: [String],},
     image3:{
         type: [String],
     },
-=======
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
     videoURL: {
         type: String,
         // required: [true, 'video URL is required'],
