@@ -16,7 +16,7 @@ const Hero = () => {
     });
   }, []);
 
-  const { darkMode,toggleDarkMode  } = useDarkMode();
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   return (
     <>
@@ -49,20 +49,19 @@ const Hero = () => {
           >
             Elevate Your Business in the Hindu Community
           </p>
-          <SearchBar/>
+          
+          <SearchBar />
         </section>
       </div>
 
       {/* Foggy Image */}
       <img
-  className="w-full -mt-[12px] sm:-mt-[25px] lg:-mt-[35px] xl:-mt-[45px] 2xl:-mt-[55px] relative z-10 filter invert brightness-0"
-  src={foggyimg}
-  alt="Foggy effect"
-/>
-
-
-
-      {/* Form start from here */}
+        className="w-full -mt-[12px] sm:-mt-[25px] lg:-mt-[35px] xl:-mt-[45px] 2xl:-mt-[55px] relative z-[10] filter invert brightness-0"
+        src={foggyimg}
+        alt="Foggy effect"
+      />
+      
+      {/* Form */}
       <div>
         {/* Your form content */}
       </div>

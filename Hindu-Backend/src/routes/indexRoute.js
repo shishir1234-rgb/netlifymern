@@ -6,7 +6,7 @@ const adminRoutes = require('./adminRoute');
 // const {authenticateJWT} =require('../services/jwtAuthenticate')
 
 // Public routes
-publicRouter.use('/company', companyRoutes); 
+publicRouter.use('/company', companyRoutes); // Use companyRoutes directly for public routes
 publicRouter.use('/admin',adminRoutes);
 
 // Private routes (require authentication)

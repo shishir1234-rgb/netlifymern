@@ -2,38 +2,52 @@ const express = require("express");
 const router = new express.Router();
 const companyController = require('../controller/companyContoller');
 const reviewController = require('../controller/reviewController');
-const {authenticateJWT} =require('../services/jwtAuthenticate');
+const { authenticateJWT } = require('../services/jwtAuthenticate');
 const upload = require('../services/cloudinaryMiddleware');
 const msgController = require('../controller/msgController');
-const {validateCompListing,validateSignUp} = require('../services/validation')
+const { validateCompListing, validateSignUp } = require('../services/validation')
+
+// Company registration and listing routes
+router.post('/compRegister', companyController.compRegister);          
+router.post('/compListing',
+    upload.fields([
+        { name: 'logo', maxCount: 1 },
+        { name: 'images', maxCount: 3 }]),
+    validateCompListing,
+    authenticateJWT,
+    companyController.compListing);
 
 
-router.post('/compRegister',  companyController.compRegister);
-router.post('/compListing', validateCompListing, companyController.compListing);
+// Authentication routes
 router.post('/Login', companyController.compLogin);
 router.post('/forgotPass', companyController.compForgotPass);
-router.post('/passChange', companyController.changePass);
+router.post('/passChange', companyController.changePass);    
+
+// Company details routes
+// router.get('/details', companyController.getdetails);       // to be used in Admin portal    
 router.post('/details', companyController.getdetails);
-router.get('/getComp/details',companyController.getOneCompany);
-router.post('/active/compDetails',companyController.getActiveComp);
+router.get('/getComp/details', companyController.getOneCompany);     // to get one comp details      
+router.get('/active/compDetails', companyController.getActiveComp);    //to use in landing page 
 
-//fetch card data
-router.get('/cardData',companyController.getAll);
+// Review routes
+router.post('/user/review', reviewController.userReview);
+router.get('/getcomp/review/:companyId', authenticateJWT, reviewController.getCompanyReviews);
+router.get('/top-rated-companies-reviews', authenticateJWT, companyController.getTopRatedCompaniesReviews);
 
-router.post('/user/review',reviewController.userReview);
-// router.post('/user/review',reviewController.userReview);
+// Media upload/update routes
 
-router.get('/getcomp/review/:companyId',authenticateJWT,reviewController.getCompanyReviews);
-router.get('/top-rated-companies-reviews', authenticateJWT,companyController.getTopRatedCompaniesReviews);
-
-router.post('/uploadImage/:id', authenticateJWT ,upload.array('images',3),companyController.uploadCompImage);
-router.post('/upload/videoURL/:id',companyController.uploadCompUrl);
+// upload images
+router.post('/uploadImage/:id', authenticateJWT, upload.array('images', 3), companyController.uploadCompImage);
+// upload video url
+router.post('/upload/videoURL/:id', companyController.uploadCompUrl);
+// update comp images
 router.put('/updateMedia/:id', authenticateJWT, upload.array('images', 3), companyController.updateCompMedia); // New route for updating media
+// delete image of a comp
 router.delete('/deleteImage/:id', authenticateJWT, companyController.deleteCompImage); // New route for deleting images
 
 
-router.post('/send/msg',msgController.addMsg);    // send msg to comp by user 
-router.get('/notifications/:companyId',msgController.notifications);
+router.post('/send/msg', msgController.addMsg);    // send msg to comp by user 
+router.get('/notifications/:companyId',authenticateJWT, msgController.notifications);  // check comp messages
 // Route to delete video URL
 router.delete('/deleteVideoURL/:id', authenticateJWT, companyController.deleteCompVideoURL);
 // Route to update both images and video URL for a company
@@ -41,10 +55,11 @@ router.put('/company/:id/updateMedia', authenticateJWT, upload.array('images', 3
 
 // Route to update the video URL for a company
 router.put('/company/:id/updateVideoURL', authenticateJWT, companyController.updateCompVideoURL);
+router.post('/upload-logo/:companyId',authenticateJWT, upload.single('logo'), companyController.updateLogo);
 
-
-router.post('/googleRegister',companyController.googleCompRegister);
-router.post('/googleLogin',companyController.googleCompLogin);
+// Google auth routes
+router.post('/googleRegister', companyController.googleCompRegister);
+router.post('/googleLogin', companyController.googleCompLogin);
 
 
 module.exports = router; // Export the router directly

@@ -3,12 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import businessLoadingSVG from '../../assets/images/truck.gif'; // Example path
 
 const SearchBar = ({ onStateSelect, onCategoryChange }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [selectedState, setSelectedState] = useState('');
   const [category, setCategory] = useState('');
   const [companyCount, setCompanyCount] = useState(0);
+  const [loading, setLoading] = useState(false); // Loading state
+
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
@@ -22,26 +25,39 @@ const SearchBar = ({ onStateSelect, onCategoryChange }) => {
   };
 
   const handleSearch = async () => {
+    setLoading(true); // Start loading animation
+
+    // Construct requestData based on your form values
     const requestData = {
-      category,
       state: selectedState,
+      category: category,
     };
+
     console.log('Request data:', requestData);
+
     try {
+      // Make the API request
       const response = await axios.post('https://hindu-backend.onrender.com/public/company/details', requestData);
-      setCompanyCount(response.data.count);
-      console.log('Companies found:', response.data.data);
-      alert("Check all selected companies.");
       
-      // Redirect to data cards page with query parameters
-      navigate(`/data-cards?state=${selectedState}&category=${category}`);
-      
+      // Check the response data
+      if (response.data && response.data.data) {
+        setCompanyCount(response.data.count);
+        console.log('Companies found:', response.data.data);
+        
+        // Redirect to data cards page with query parameters
+        navigate(`/data-cards?state=${selectedState}&category=${category}`);
+      } else {
+        console.log('Unexpected response format:', response.data);
+      }
+
       // Optionally clear the form if needed
       setSelectedState('');
       setCategory('');
       setCompanyCount(0);
     } catch (error) {
       console.error('Error fetching companies:', error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false); // Stop loading animation
     }
   };
 
@@ -56,6 +72,19 @@ const SearchBar = ({ onStateSelect, onCategoryChange }) => {
       position: 'relative',
       zIndex: 20
     }}>
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.75)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 50
+        }}>
+          <img src={businessLoadingSVG} alt="Loading..." style={{ width: '80px', height: '80px' }} />
+        </div>
+      )}
       <div style={{
         position: 'relative',
         width: '16rem',
@@ -76,7 +105,7 @@ const SearchBar = ({ onStateSelect, onCategoryChange }) => {
             padding: '1rem'
           }}
         >
-          <span>{selectedState || "Your States"}</span>
+          <span>{selectedState || "States"}</span>
           <FontAwesomeIcon icon={faCaretDown} />
         </div>
         {isDropdownOpen && (
@@ -88,11 +117,10 @@ const SearchBar = ({ onStateSelect, onCategoryChange }) => {
             borderRadius: '0 0 0.375rem 0.375rem',
             backgroundColor: 'white',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            maxHeight: 'none', // Remove max height to fit content
-            height: 'auto', // Adjust height based on content
+            height: 'auto',
             zIndex: 10,
-            padding: '0', // Optional: Adjust padding as needed
-            margin: '0' // Optional: Adjust margin as needed
+            padding: '0',
+            margin: '0'
           }}>
             {['ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'].map(state => (
               <li
@@ -118,11 +146,11 @@ const SearchBar = ({ onStateSelect, onCategoryChange }) => {
         alignItems: 'center',
         paddingRight: '1rem',
         width: '100%',
-        color: '#FFA500'
+        color: '#FFA500',
       }}>
         <input
           type="text"
-          placeholder="Enter Category"
+          placeholder="Find..."
           style={{
             padding: '1rem',
             width: '100%',

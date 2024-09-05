@@ -13,15 +13,30 @@ cloudinary.config({
 // Configure Cloudinary Storage
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    params: {
-        folder: 'company_images', // Optional: specify the folder in Cloudinary
-        allowed_formats: ['jpg', 'png', 'jpeg', 'mp4'],
-        resource_type: 'auto', // Automatically detect the file type (image or video)
-    },
+    // params: {
+    //     folder: 'company_images', // Optional: specify the folder in Cloudinary
+    //     allowed_formats: ['jpg', 'png', 'jpeg', 'mp4'],
+    //     resource_type: 'auto', // Automatically detect the file type (image or video)
+    // },
+    params: async (req, file) => {
+        let folder = 'general_uploads';
+        if (file.fieldname === 'logo') {
+            folder = 'company_logos';
+        } else if (file.fieldname === 'images') {
+            folder = 'company_images';
+        }
+
+        return {
+            folder: folder,
+            allowed_formats: ['jpg', 'png', 'jpeg', 'mp4'],
+            resource_type: 'auto',
+            public_id: `${Date.now()}-${file.originalname}`
+        };
+    }
 });
 
 // Initialize multer with Cloudinary storage
 const upload = multer({ storage: storage });
 
-// Export the middleware
+
 module.exports = upload;

@@ -13,14 +13,14 @@ exports.authenticateJWT = (req, res, next) => {
     const bearerHeader = req.headers['authorization'];
 
     if (!bearerHeader) {
-        return res.status(401).json({success:false, message: 'Authentication failed: No token provided' });
+        return res.status(401).json({ message: 'Authentication failed: No token provided' });
     }
 
     const bearer = bearerHeader.split(' ');
     // console.log('Bearer array:', bearer);
     
     if (bearer.length !== 2 || bearer[0].toLowerCase() !== 'bearer') {
-        return res.status(401).json({success:false, message: 'Authentication failed: Invalid authorization header format' });
+        return res.status(401).json({ message: 'Authentication failed: Invalid authorization header format' });
     }
 
     const token = bearer[1];
@@ -29,7 +29,7 @@ exports.authenticateJWT = (req, res, next) => {
     jwt.verify(token, process.env.seckret_Key, (err, user) => {
         if (err) {
             console.error('JWT verification error:', err);
-            return res.status(403).json({success:false, message: 'Authentication failed: Invalid token' });
+            return res.status(403).json({ message: 'Authentication failed: Invalid token' });
         }
 
         req.user = user; // Attach the user to the request object

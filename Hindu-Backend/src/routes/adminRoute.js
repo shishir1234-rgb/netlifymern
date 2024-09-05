@@ -10,15 +10,14 @@ router.post('/adminsignUp', adminController.adminSignup);
 router.post('/adminLogin', adminController.adminLogin);
 router.post('/adminForgot', adminController.adminForgotPass);
 router.post('/adminChangePass', adminController.adminChangePass);
-// router.get('/companiesData', authenticateJWT, adminController.adminSignup);
-router.delete('/delete/company/:companyId', adminController.deleteCompany);
-router.post('/update/company', 
-    // authenticateJWT, 
-    adminController.updateCompany);
-router.get('/new-signups',adminController.showLatestComp);
-router.get('/allComp',companyController.getAll);   // get all comp data
-router.put('/changeStatus/:companyId',companyController.updateCompStatus);  // update status
-router.get('/companies',companyController.getByStatus);   // get comp by status 
+
+router.delete('/delete/company/:companyId',authenticateJWT, adminController.deleteCompany);  // delete comp
+router.put('/update/company/:companyId', authenticateJWT, adminController.updateCompany);    //update comp
+router.get('/new-signups',authenticateJWT,adminController.showLatestComp);              // show new comp
+router.get('/allComp',companyController.getAll);                                         // get all comp data
+router.put('/changeStatus/:companyId',authenticateJWT,companyController.updateCompStatus);  // update status
+router.get('/companies',authenticateJWT,companyController.getByStatus);   // get comp by status 
+router.get('/top-rated-companies-reviews', authenticateJWT, companyController.getTopRatedCompaniesReviews);
 
 
 //  upload csv file 
@@ -27,5 +26,7 @@ router.post('/upload', authenticateJWT, upload.single('file'), uploadComp.regist
 router.post('/submit-msg',adminController.adminMsg);
 
 router.post('/sendMail',adminController.sendMailMsg);
+
+// router.post('');
 
 module.exports = router;

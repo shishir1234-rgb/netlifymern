@@ -1,11 +1,40 @@
 import React, { useState } from 'react';
-import { useDarkMode } from '../../components/DarkModeContext'; // Adjust the import path as necessary
-import ListImg from '../../assets/images/list.jpg';
-import ListingImg from '../../assets/images/listing.png';
+import { useDarkMode } from '../../components/DarkModeContext';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import listImage from '../../assets/images/list.jpg'
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 MB in bytes
+
+const Alert = ({ children, darkMode }) => (
+  <div className={`p-4 mb-6 rounded-lg ${darkMode ? 'bg-orange-900 text-orange-100' : 'bg-orange-100 text-orange-800'}`}>
+    {children}
+  </div>
+);
+
+const InputField = ({ label, darkMode, ...props }) => (
+  <div className="relative">
+    <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{label}</label>
+    <input
+      className={`block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${darkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-300 text-gray-900'} transition`}
+      {...props}
+    />
+  </div>
+);
+
+const SelectField = ({ label, options, darkMode, ...props }) => (
+  <div className="relative">
+    <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{label}</label>
+    <select
+      className={`block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${darkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-300 text-gray-900'} transition`}
+      {...props}
+    >
+      {options.map(option => (
+        <option key={option} value={option}>{option}</option>
+      ))}
+    </select>
+  </div>
+);
 
 const ListingInput = () => {
   const location = useLocation();
@@ -35,6 +64,7 @@ const ListingInput = () => {
     agreeTerms: false,
   });
   const { darkMode } = useDarkMode();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -114,7 +144,7 @@ const ListingInput = () => {
         logo: null,
         images: [],
         agreeTerms: false,
-      }); // Reset the form on success
+      });
       navigate('/');
     } catch (error) {
       console.error('API Error:', error.response ? error.response.data : error.message);
@@ -122,257 +152,315 @@ const ListingInput = () => {
     }
   };
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
-    <main className={`py-8 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <section className={`container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 rounded-xl ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
-        <div className="text-center mb-6">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">Hindu Economic Forum</h2>
+    <main className={`py-8 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
+      <section className={`container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 rounded-xl  ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-bold mb-4">Hindu Economic Forum</h2>
           <p className="text-lg lg:text-xl lg:text-justify">
-            Hindu Economic Forum brings together various Hindu businesses to enable their rapid growth and success. It encourages synergies and promotes businesses based on Hindu values. We believe these values empower our members to develop their spirituality, guiding them in personal and business development as effective learners and good citizens. By completing this form, you fully agree and accept Hindu Values, follow WhatsApp group rules, and authorize us to register your business details in Hindu Business Directory <span className='text-orange-500'>(hindubusinessdirectory.com.au)</span>
+            Hindu Economic Forum brings together various Hindu businesses to enable their rapid growth and success. It encourages synergies and promotes businesses based on Hindu values. We believe these values empower our members to develop their spirituality, guiding them in personal and business development as effective learners and good citizens.
           </p>
         </div>
-        <div className="flex flex-col lg:flex-row items-center">
-          <div className={`w-full lg:w-1/2 p-6 sm:p-8 ${darkMode ? 'bg-gray-700' : 'bg-white'} rounded-xl`}>
-            <h3 className="text-2xl font-semibold mb-6">Add New Business</h3>
+        <Alert darkMode={darkMode}>
+          <h4 className="font-bold mb-2">Important Notice</h4>
+          <p>
+            By completing this form, you fully agree and accept Hindu Values, follow WhatsApp group rules, and authorize us to register your business details in Hindu Business Directory <span className='font-bold'>(hindubusinessdirectory.com.au)</span>
+          </p>
+        </Alert>
+        <div 
+  className="flex flex-col lg:flex-row items-start gap-8"
+  style={{
+    backgroundImage: `url(${listImage})`, /* Replace with your image path */
+    backgroundSize: 'cover', /* Ensures the image covers the container */
+    backgroundPosition: 'center', /* Centers the image within the container */
+    backgroundRepeat: 'no-repeat', /* Prevents the image from repeating */
+  }}
+>          <div className={`w-full lg:w-[50%] p-6 sm:p-8 bg-orange-50 ${darkMode ? 'bg-gray-700' : 'bg-white'}  `}>
+            <h3 className="text-3xl font-semibold mb-6">Add New Business</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
               <InputField
+                label="First Name"
                 type="text"
                 name="firstName"
-                placeholder="First Name"
                 value={formData.firstName}
                 onChange={handleChange}
                 required
                 darkMode={darkMode}
               />
               <InputField
+                label="Last Name"
                 type="text"
                 name="lastName"
-                placeholder="Last Name"
                 value={formData.lastName}
                 onChange={handleChange}
                 required
                 darkMode={darkMode}
               />
               <InputField
+                label="Company Name"
                 type="text"
                 name="companyName"
-                placeholder="Company Name"
                 value={formData.companyName}
                 onChange={handleChange}
                 required
                 darkMode={darkMode}
               />
               <InputField
+                label="Email"
                 type="email"
                 name="email"
-                placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
                 required
                 darkMode={darkMode}
               />
               <InputField
+                label="Company Password"
                 type="password"
                 name="companyPassword"
-                placeholder="Company Password"
                 value={formData.companyPassword}
                 onChange={handleChange}
                 required
                 darkMode={darkMode}
               />
               <InputField
+                label="Contact Number"
                 type="text"
                 name="contactNumber"
-                placeholder="Contact Number"
                 value={formData.contactNumber}
                 onChange={handleChange}
                 required
                 darkMode={darkMode}
               />
               <SelectField
+                label="Category"
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
                 options={[
-                  'Category', 'Shops', 'Retailers', 'Home Businesses', 'Franchises', 'Traders', 'Manufacturers',
+                  'Select Category', 'Shops', 'Retailers', 'Home Businesses', 'Franchises', 'Traders', 'Manufacturers',
                   'Industrialist', 'Exporters', 'Importers', 'Professionals', 'Teachers', 'Doctors',
                   'Nurses', 'Technocrats', 'Economist', 'Thinkers'
                 ]}
                 darkMode={darkMode}
               />
               <InputField
+                label="Address"
                 type="text"
                 name="address"
-                placeholder="Address"
                 value={formData.address}
                 onChange={handleChange}
-                required
                 darkMode={darkMode}
               />
-              <SelectField
+              <InputField
+                label="State"
+                type="text"
                 name="state"
                 value={formData.state}
                 onChange={handleChange}
-                options={[
-                  'Select', 'NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT'
-                ]}
                 darkMode={darkMode}
               />
               <InputField
+                label="Pincode"
                 type="text"
                 name="pincode"
-                placeholder="Pincode"
                 value={formData.pincode}
                 onChange={handleChange}
-                required
                 darkMode={darkMode}
               />
               <InputField
+                label="Country"
                 type="text"
                 name="country"
-                placeholder="Country"
                 value={formData.country}
                 onChange={handleChange}
-                required
                 darkMode={darkMode}
               />
               <InputField
-                type="text"
+                label="Place Map URL"
+                type="url"
                 name="place_Map_url"
-                placeholder="Map URL"
                 value={formData.place_Map_url}
                 onChange={handleChange}
                 darkMode={darkMode}
               />
               <InputField
+                label="Description"
                 type="text"
                 name="description"
-                placeholder="Description"
                 value={formData.description}
                 onChange={handleChange}
                 darkMode={darkMode}
               />
               <InputField
-                type="text"
+                label="Video URL"
+                type="url"
                 name="videoURL"
-                placeholder="Video URL"
                 value={formData.videoURL}
                 onChange={handleChange}
                 darkMode={darkMode}
               />
               <InputField
-                type="text"
+                label="Facebook URL"
+                type="url"
                 name="facebookURL"
-                placeholder="Facebook URL"
                 value={formData.facebookURL}
                 onChange={handleChange}
                 darkMode={darkMode}
               />
               <InputField
-                type="text"
+                label="Pinterest URL"
+                type="url"
                 name="pinterestURL"
-                placeholder="Pinterest URL"
                 value={formData.pinterestURL}
                 onChange={handleChange}
                 darkMode={darkMode}
               />
               <InputField
-                type="text"
+                label="Skype URL"
+                type="url"
                 name="skypeURL"
-                placeholder="Skype URL"
                 value={formData.skypeURL}
                 onChange={handleChange}
                 darkMode={darkMode}
               />
               <InputField
-                type="text"
+                label="LinkedIn URL"
+                type="url"
                 name="linkedinURL"
-                placeholder="LinkedIn URL"
                 value={formData.linkedinURL}
                 onChange={handleChange}
                 darkMode={darkMode}
               />
               <InputField
-                type="text"
+                label="Website URL"
+                type="url"
                 name="websiteURL"
-                placeholder="Website URL"
                 value={formData.websiteURL}
                 onChange={handleChange}
                 darkMode={darkMode}
               />
-              <InputField
-                type="file"
-                name="logo"
-                placeholder="Upload Logo"
-                onChange={handleChange}
-                darkMode={darkMode}
-              />
-              <InputField
-                type="file"
-                name="images"
-                placeholder="Upload Images"
-                multiple
-                onChange={handleChange}
-                darkMode={darkMode}
-              />
-              <div className="flex items-center">
+              <div className="relative">
+  <label
+    className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+  >
+    Logo (max 2 MB)
+  </label>
+  <div
+    className={`relative flex items-center justify-center  w-20  h-20 rounded-full ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900'} border ${darkMode ? 'border-gray-700' : 'border-gray-300'} transition cursor-pointer`}
+  >
+    <input
+      type="file"
+      name="logo"
+      accept="image/*"
+      onChange={handleChange}
+      className="absolute inset-0 opacity-0 cursor-pointer"
+    />
+    <span className="text-2xl ">{/* Icon or text for the circular button */}📁</span>
+  </div>
+</div>
+
+
+<label
+    className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+  >
+    Images
+  </label>
+              <div className="relative flex items-center justify-center  w-20  h-20 rounded-sm  ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900'} border ${darkMode ? 'border-gray-700' : 'border-gray-300'} transition cursor-pointer">
+                <input
+                  type="file"
+                  name="images"
+                  accept="image/*"
+                  multiple
+                  onChange={handleChange}
+                  className={`absolute inset-0 opacity-0 cursor-pointer`}
+                />
+                    <span className="text-2xl">{/* Icon or text for the circular button */}📁</span>
+              </div>
+              <div className="flex items-center space-x-4">
                 <input
                   type="checkbox"
                   name="agreeTerms"
+                  id="agreeTerms"
                   checked={formData.agreeTerms}
                   onChange={handleChange}
-                  className={`mr-2 ${darkMode ? 'accent-orange-500' : 'accent-blue-600'}`}
+                  className="w-5 h-5"
                 />
-                <label htmlFor="agreeTerms" className="text-sm">
-                  I agree to the <a href="/terms" className={`font-bold ${darkMode ? 'text-orange-500' : 'text-blue-600'}`}>Terms and Conditions</a>.
+                <label htmlFor="agreeTerms" className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  I agree to the{' '}
+                  <button
+                    type="button"
+                    onClick={openModal}
+                    className="text-blue-500 underline hover:text-blue-700"
+                  >
+                    terms and conditions
+                  </button>
                 </label>
               </div>
               <button
                 type="submit"
-                className={`w-full py-2 px-4 rounded-lg ${darkMode ? 'bg-orange-500 text-white' : 'bg-blue-600 text-white'}`}
+                className={`w-[40%] py-2 px-4 text-lg font-semibold rounded-lg ${darkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'} hover:bg-blue-700 transition`}
               >
                 Submit
               </button>
             </form>
           </div>
-          <div className="w-full lg:w-1/2 p-6">
-            <img src={ListingImg} alt="Listing" className="w-full h-auto rounded-xl" />
-          </div>
         </div>
       </section>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+  <div className="absolute inset-0 bg-black opacity-50" onClick={closeModal}></div>
+  <div className={`relative bg-white p-6 rounded-lg shadow-lg ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900'}`}>
+    <button
+      onClick={closeModal}
+      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+    >
+      &times;
+    </button>
+    <h3 className="text-lg font-semibold mb-4">Terms and Conditions</h3>
+    <p className="mb-4">
+      By submitting this form, you agree to the following terms and conditions:
+    </p>
+    <ul className="list-disc pl-5 mb-4">
+      <li>
+        Follow Hindu Values and WhatsApp Guidelines and Rules of the group.
+      </li>
+      <li>
+        HEF's objective is to promote Hindu eco-systemic and businesses.
+      </li>
+      <li>
+        Do not exhibit rude or disrespectful behavior towards any individual or group.
+      </li>
+      <li>
+        This group should not be used for personal opinions, private messages, spam chains, individual chatting, self-promotions, or wishes.
+      </li>
+      <li>
+        If your message is not relevant to the majority of the group members, please send it directly to the relevant person rather than to the entire group.
+      </li>
+      <li>
+        For suggestions or grievances, please address them in private meetings rather than in the group.
+      </li>
+      <li>
+        Avoid arguments in the WhatsApp group. If you need to argue, contact the individual directly via phone or private chat.
+      </li>
+      <li>
+        Announcements about third-party events require Committee approval before circulation.
+      </li>
+      <li>
+        Delinquent members will be removed from the group.
+      </li>
+    </ul>
+  </div>
+</div>
+
+      )}
     </main>
   );
 };
-
-const InputField = ({ type, name, placeholder, value, onChange, required, darkMode }) => (
-  <div className="mb-4">
-    <input
-      type={type}
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      required={required}
-      className={`w-full px-4 py-2 border rounded-lg ${darkMode ? 'bg-gray-800 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'} focus:outline-none focus:ring-2 focus:ring-orange-500`}
-    />
-  </div>
-);
-
-const SelectField = ({ name, value, onChange, options, darkMode }) => (
-  <div className="mb-4">
-    <select
-      name={name}
-      value={value}
-      onChange={onChange}
-      className={`w-full px-4 py-2 border rounded-lg ${darkMode ? 'bg-gray-800 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'} focus:outline-none focus:ring-2 focus:ring-orange-500`}
-    >
-      {options.map((option, index) => (
-        <option key={index} value={option} className={darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}>
-          {option}
-        </option>
-      ))}
-    </select>
-  </div>
-);
 
 export default ListingInput;

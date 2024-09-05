@@ -9,7 +9,7 @@ const { transporter } = require('../utility/helper');
 const { calculateDateRange } = require('../utility/helper');
 const AdminMsg = require('../model/adminMsgModel');
 // const nodemailer = require('nodemailer');
-const { formatDateTime } = require('../utility/helper');
+const { formatDateTime, sendEmail } = require('../utility/helper');
 
 
 
@@ -214,18 +214,18 @@ exports.deleteCompany = async (req, res) => {
 
 
 exports.updateCompany = async (req, res) => {
-  const { _id } = req.body
+  const { companyId } = req.params;
   const updateData = req.body;
-  console.log('Update Data:', updateData); // Log the request body
+  // console.log('Update Data:', updateData); // Log the request body
 
   try {
-    const company = await Company.findByIdAndUpdate(_id, updateData, { new: true, runValidators: true });
+    const company = await Company.findByIdAndUpdate(companyId, updateData, { new: true, runValidators: true });
 
     if (!company) {
-      return res.status(404).json({success:false, message: 'Company not found' });
+      return res.status(404).json({ message: 'Company not found' });
     }
 
-    res.status(200).json({success:true, message: 'Company updated successfully', company });
+    res.status(200).json({ message: 'Company updated successfully', company });
   } catch (error) {
     console.error('error', error);
     res.status(500).json({ message: 'Server error', error });
@@ -234,7 +234,7 @@ exports.updateCompany = async (req, res) => {
 
 exports.showLatestComp = async (req, res) => {
   try {
-    const days = parseInt(req.query.days, 10) || 1; // Default to 1 day if no query parameter is provided
+    const days = parseInt(req.query.days, 10) || 7; // Default to 1 day if no query parameter is provided
     const startDate = calculateDateRange(days);
 
     const newCompanies = await Company.find({ createdAt: { $gte: startDate } })
@@ -253,15 +253,17 @@ exports.showLatestComp = async (req, res) => {
 // api to take msg for admin from home page 
 exports.adminMsg = async (req, res) => {
   await body('name').isString().notEmpty().withMessage('User name is required').run(req);
-  await body('comment').isString().notEmpty().withMessage('coment is required').run(req);
+  await body('comment').isString().notEmpty().withMessage('Comment is required').run(req);
   await body('email').isEmail().withMessage('Invalid email').run(req);
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+
   try {
     const { name, email, phoneNo, comment } = req.body;
-    console.log('req body', req.body);
+    // console.log('Request body:', req.body);
 
     // Create a new AdminMsg instance
     const newMsg = new AdminMsg({
@@ -269,43 +271,53 @@ exports.adminMsg = async (req, res) => {
       email,
       phoneNo,
       comment,
-      msgDate: formatDateTime()
+      msgDate: formatDateTime(),
     });
 
     // Save the message to the database
     await newMsg.save();
 
-    // Set up the email options
-    const mailOptions = {
+    // Set up email options for admin
+    const adminMailOptions = {
       from: 'hindueconomicforum@gmail.com',
       to: 'weldarcbackup@gmail.com', // Admin email address
-      subject: 'New Message Received check details .',
-      text: `You have received a new message from ${name}.\n\nDetails:\nName: ${name}\nEmail: ${email}\nPhone No: ${phoneNo}\nComment: ${comment}\nDate: ${newMsg.msgDate}`
+      subject: 'New Message Received - Check Details',
+      text: `You have received a new message from ${name}.\n\nDetails:\nName: ${name}\nEmail: ${email}\nPhone No: ${phoneNo}\nComment: ${comment}\nDate: ${newMsg.msgDate}`,
     };
 
-    // Send the email to the admin
-    try {
-      // Send email
-      const info = await transporter.sendMail(mailOptions);
-      console.log('Email sent: ' + info.response);
+    // Set up email options for user
+    const userMailOptions = {
+      from: 'hindueconomicforum@gmail.com',
+      to: email, // User's email address
+      subject: 'Thank You for Contacting Us',
+      text: `Dear ${name},\n\nThank you for contacting us. We have received your message and will be in touch with you as soon as possible.\n\nBest Regards,\nThe Team`,
+    };
 
-    } catch (error) {
-      console.error('Error sending email:', error);
-      return false;
-    }
+  
+   // Send both emails in parallel
+   const [adminEmailSent, userEmailSent] = await Promise.all([
+    transporter.sendMail(adminMailOptions),
+    transporter.sendMail(userMailOptions)
+  ]);
+
+  // console.log('Admin Email sent: ' + adminEmailSent.response);
+  // console.log('User Email sent: ' + userEmailSent.response);
 
     // Send a response back to the frontend
-    res.status(200).json({ message: 'Message submitted successfully and email sent to admin.' });
+    return res.status(200).json({ message: 'Message submitted successfully and emails sent to admin and user.' });
+
 
   } catch (error) {
     console.error('Error submitting message:', error);
-    res.status(500).json({ error: 'An error occurred while submitting the message.' });
+    return res.status(500).json({ error: 'An error occurred while submitting the message.' });
   }
-}
+};
+
 
 exports.sendMailMsg = async (req, res) => {
-  await body('email').isEmail().withMessage('Invalid email').run(req);
-  await body('subject').isString().notEmpty().withMessage('subject is required').run(req);
+  await body('sendTo').isEmail().withMessage('Invalid email').run(req);
+  await body('message').isString().notEmpty().withMessage('subject is required').run(req);
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -313,6 +325,8 @@ exports.sendMailMsg = async (req, res) => {
 
   try {
     const { sendTo, message } = req.body;
+    // console.log('req body', req.body);
+
 
     // Set up the email options
     const mailOptions = {
@@ -327,6 +341,7 @@ exports.sendMailMsg = async (req, res) => {
       // Send email to companies
       const info = await transporter.sendMail(mailOptions);
       console.log('Email sent: ' + info.response);
+      res.send("Mail is send to the user selected.")
 
     } catch (error) {
       console.error('Error sending email:', error);
@@ -338,3 +353,5 @@ exports.sendMailMsg = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while submitting the message.' });
   }
 }
+
+

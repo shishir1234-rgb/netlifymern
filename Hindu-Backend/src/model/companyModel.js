@@ -8,7 +8,7 @@ const companySchema = new Schema({
     },
     lastName: {
         type: String,
-        required: true
+        // required: true
     },
     compName: {
         type: String,
@@ -83,6 +83,10 @@ const companySchema = new Schema({
     image: {
         type: [String],
         // required: [true, 'image URL is required'],
+    },
+    image2:{type: [String],},
+    image3:{
+        type: [String],
     },
     videoURL: {
         type: String,

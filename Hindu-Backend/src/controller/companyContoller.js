@@ -19,8 +19,8 @@ const client = new OAuth2Client(process.env.YOUR_GOOGLE_OAUTH_CLIENT_ID);
 exports.compRegister = async (req, res, next) => {
 
 
-    const { firstName, lastName, email, compName, contactNo, status, compPassword } = req.body;
-    console.log('req body', req.body);
+    const { firstName, lastName, email, compName, contactNo, compPassword } = req.body;
+    // console.log('req body', req.body);
 
     try {
         const existingUser = await Company.findOne({ email: req.body.email });
@@ -69,30 +69,116 @@ exports.compRegister = async (req, res, next) => {
     }
 };
 
+// exports.compListing = async (req, res) => {
+
+
+//     const { firstName, lastName, compName, email, compPassword, category, contactNo, address, state, pincode, country, place_Map_url,discription ,videoURL , facebookURL ,pinterestURL , skypeURL ,linkedinURL ,websiteURl,logo,image } = req.body;
+//     console.log('req.body', req.body);
+
+
+//     try {
+//         const existingCompany = await Company.findOne({ email: req.body.email });
+//         if (existingCompany) {
+//             return res.status(400).json({ message: 'Company and email exists plese use diferent .' });
+//         }
+
+//         // const hashedPassword = await bcrypt.hash(compPassword, 10);
+//         let hashedPassword = existingCompany.compPassword;
+//         if (compPassword) {
+//             hashedPassword = await bcrypt.hash(compPassword, 10);
+//         }
+
+//         // Update the existing company details
+//         existingCompany.firstName = firstName || existingCompany.firstName;
+//         existingCompany.lastName = lastName || existingCompany.lastName;
+//         existingCompany.compName = compName || existingCompany.compName;
+//         existingCompany.compPassword = hashedPassword; // Use the new password if provided
+//         existingCompany.category = category || existingCompany.category;
+//         existingCompany.contactNo = contactNo || existingCompany.contactNo;
+//         existingCompany.address = address || existingCompany.address;
+//         existingCompany.state = state || existingCompany.state;
+//         existingCompany.pincode = pincode || existingCompany.pincode;
+//         existingCompany.country = country || existingCompany.country;
+//         existingCompany.place_Map_url = place_Map_url || existingCompany.place_Map_url;
+//         existingCompany.modifyAt = formatDateTime(); // Update modifyAt timestamp
+
+
+//         // await company.save();
+//         await existingCompany.save();
+//         // Sending mail notification 
+//         const emailTemplateData = {                                       // data that is passed in template           
+//             subject: 'Company Details Updated Successfully',
+//             clientName: existingCompany.compName,
+//             clientEmail: existingCompany.email,
+//             clientPassword: compPassword || '(unchanged)', // Only display if password is updated
+//         };
+//         console.log('Mail data:', emailTemplateData);  // Logging email template data
+
+//         // Get and compile the template
+//         const templateFilePath = "../views/userInvitation.ejs";
+//         const success = await sendNoticeEmail(email, emailTemplateData, templateFilePath);
+//         if (!success) {
+//             throw new Error('Failed to send email');
+//         }
+
+//         res.status(201).json({ message: 'Company registered successfully', details: existingCompany });
+//     } catch (err) {
+//         console.error("error", err);
+//         if (err.code === 11000) {
+//             return res.status(400).json({ message: 'Duplicate key error', error: err });
+//         }
+//         res.status(500).json({ message: 'Server error', error: err });
+//     }
+// };
+
+
 exports.compListing = async (req, res) => {
+    console.log('listing...');
+    
+    const {
+        firstName, lastName, compName, email, compPassword, category, contactNo,
+        address, state, pincode, country, place_Map_url, discription, videoURL,
+        facebookURL, pinterestURL, skypeURL, linkedinURL, websiteURL
+    } = req.body;
 
-
-    const { firstName, lastName, compName, email, compPassword, category, contactNo, address, state, pincode, country, place_Map_url } = req.body;
     console.log('req.body', req.body);
+    // console.log('req.files', req.files);
 
 
     try {
         const existingCompany = await Company.findOne({ email: req.body.email });
         if (!existingCompany) {
-            return res.status(400).json({ message: 'Company and email does not exists please signup for listing.' });
+            return res.status(404).json({ message: 'Company not found' });
         }
 
-        // const hashedPassword = await bcrypt.hash(compPassword, 10);
         let hashedPassword = existingCompany.compPassword;
         if (compPassword) {
             hashedPassword = await bcrypt.hash(compPassword, 10);
+        }
+
+        // Handle image and logo uploads
+        let logoUrl = existingCompany.logo;
+        let imageUrls = existingCompany.image;
+
+        if (req.files) {
+            if (req.files.logo) {
+                const logoUpload = await cloudinary.uploader.upload(req.files.logo[0].path, { folder: 'company_logos' });
+                logoUrl = logoUpload.secure_url;
+            }
+            if (req.files.images) {
+                imageUrls = [];
+                for (let i = 0; i < req.files.image.length; i++) {
+                    const imageUpload = await cloudinary.uploader.upload(req.files.image[i].path, { folder: 'company_images' });
+                    imageUrls.push(imageUpload.secure_url);
+                }
+            }
         }
 
         // Update the existing company details
         existingCompany.firstName = firstName || existingCompany.firstName;
         existingCompany.lastName = lastName || existingCompany.lastName;
         existingCompany.compName = compName || existingCompany.compName;
-        existingCompany.compPassword = hashedPassword; // Use the new password if provided
+        existingCompany.compPassword = hashedPassword;
         existingCompany.category = category || existingCompany.category;
         existingCompany.contactNo = contactNo || existingCompany.contactNo;
         existingCompany.address = address || existingCompany.address;
@@ -100,28 +186,34 @@ exports.compListing = async (req, res) => {
         existingCompany.pincode = pincode || existingCompany.pincode;
         existingCompany.country = country || existingCompany.country;
         existingCompany.place_Map_url = place_Map_url || existingCompany.place_Map_url;
-        existingCompany.modifyAt = formatDateTime(); // Update modifyAt timestamp
+        existingCompany.discription = discription || existingCompany.discription;
+        existingCompany.videoURL = videoURL || existingCompany.videoURL;
+        existingCompany.facebookURL = facebookURL || existingCompany.facebookURL;
+        existingCompany.pinterestURL = pinterestURL || existingCompany.pinterestURL;
+        existingCompany.skypeURL = skypeURL || existingCompany.skypeURL;
+        existingCompany.linkedinURL = linkedinURL || existingCompany.linkedinURL;
+        existingCompany.websiteURL = websiteURL || existingCompany.websiteURL;
+        existingCompany.logo = logoUrl;
+        existingCompany.image = imageUrls;
+        existingCompany.modifyAt = formatDateTime();
 
-
-        // await company.save();
         await existingCompany.save();
-        // Sending mail notification 
-        const emailTemplateData = {                                       // data that is passed in template           
+
+        const emailTemplateData = {
             subject: 'Company Details Updated Successfully',
             clientName: existingCompany.compName,
             clientEmail: existingCompany.email,
-            clientPassword: compPassword || '(unchanged)', // Only display if password is updated
+            clientPassword: compPassword || '(unchanged)',
         };
-        console.log('Mail data:', emailTemplateData);  // Logging email template data
+        console.log('Mail data:', emailTemplateData);
 
-        // Get and compile the template
         const templateFilePath = "../views/userInvitation.ejs";
         const success = await sendNoticeEmail(email, emailTemplateData, templateFilePath);
         if (!success) {
             throw new Error('Failed to send email');
         }
 
-        res.status(201).json({ message: 'Company registered successfully', details: existingCompany });
+        res.status(201).json({ message: 'Company updated successfully', details: existingCompany });
     } catch (err) {
         console.error("error", err);
         if (err.code === 11000) {
@@ -130,6 +222,7 @@ exports.compListing = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: err });
     }
 };
+
 
 exports.compLogin = async (req, res) => {
     // Validation rules
@@ -142,7 +235,7 @@ exports.compLogin = async (req, res) => {
     }
 
     const { email, compPassword } = req.body;
-    console.log('req.body for comp', req.body);
+    // console.log('req.body for comp', req.body);
 
     try {
         const company = await Company.findOne({ email });
@@ -159,17 +252,15 @@ exports.compLogin = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-
-
         const token = jwt.sign({ companyId: company._id }, process.env.seckret_Key, { expiresIn: '1h' });
         // Save user session
         req.session.user = { id: company._id, email: company.email };
-        console.log('Session set:', req.session.user);  // Add this line for debugging
+        // console.log('Session set:', req.session.user);  // Add this line for debugging
         req.session.save(err => {
             if (err) {
                 return res.status(500).json({ message: 'Failed to save session' });
             }
-            res.status(200).json({ companyId: company, token, message: 'Logged in successfully', sessionsDat: req.session.user });
+            res.status(200).json({ companyId: company._id, token, message: 'Logged in successfully', sessionsDat: req.session.user });
         });
     } catch (err) {
         console.error('error', err);
@@ -186,7 +277,7 @@ exports.compForgotPass = async (req, res) => {
     }
 
     const { email } = req.body;
-    console.log('email:', req.body);
+    // console.log('email:', req.body);
 
     try {
         const company = await Company.findOne({ email });
@@ -278,23 +369,30 @@ exports.changePass = async (req, res) => {
 
 exports.getdetails = async (req, res) => {
     const { category, state } = req.body;
-    console.log('req.body :', req.body);
+    // console.log('req.body :', req.body);
     try {
         // Build the query object based on provided fields
         const query = {};
         if (category) {
-            query.category = category;
+            // query.category = category;
+            query.category = { $regex: new RegExp(`^${category}$`, 'i') };
         }
-        if (state) {
+        if (state && state.trim()) {
             query.state = state;
         }
+
 
         const companies = await Company.find(query);
         if (companies.length === 0) {
             return res.status(400).json({ message: 'No companies found' });
         }
+        const count = await Company.countDocuments(query); // Get the count
 
-        res.status(200).json({ success: true, message: 'Companies found successfully', data: companies });
+        if (count === 0) {
+            return res.status(400).json({ message: 'No companies found' });
+        }
+
+        res.status(200).json({ success: true, message: 'Companies found successfully', data: companies, number: count });
     } catch (error) {
         console.error('error', error);
         res.status(500).json({ msg: "Internal server error", err: error });
@@ -303,16 +401,17 @@ exports.getdetails = async (req, res) => {
 
 exports.getActiveComp = async (req, res) => {
     const { category, state } = req.body;
-    console.log('req.body :', req.body);
+    // console.log('req.body :', req.body);
     try {
-        // Build the query object based on provided fields
-        const query = { status: 'Active' }; // Only include companies with 'Active' status
+        const query = {};
         if (category) {
-            query.category = category;
+            // query.category = category;
+            query.category = { $regex: new RegExp(`^${category}$`, 'i') };
         }
-        if (state) {
+        if (state && state.trim()) {
             query.state = state;
         }
+
 
         const companies = await Company.find(query);
         if (companies.length === 0) {
@@ -360,10 +459,10 @@ exports.getOneCompany = async (req, res) => {
 exports.getAll = async (req, res) => {
     try {
         const companies = await Company.find({}); // Fetch all companies
-        res.status(200).json({success:true,message:"Data fetched successfully",data:companies});
+        res.status(200).json(companies);
     } catch (error) {
         console.error('Error fetching companies:', error);
-        res.status(500).json({success:false, message: 'Server error', error });
+        res.status(500).json({ message: 'Server error', error });
     }
 }
 
@@ -381,7 +480,7 @@ exports.getByStatus = async (req, res) => {
         // Count the number of companies with the specified status
         const count = await Company.countDocuments(filter);
 
-        res.status(200).json({ count, companies }); 
+        res.status(200).json({ count, companies });
     } catch (error) {
         console.error('Error fetching companies:', error);
         res.status(500).json({ message: 'Server error', error });
@@ -766,6 +865,37 @@ exports.googleCompLogin = async (req, res) => {
     } catch (error) {
         console.error('Error during Google Login:', error);
         res.status(500).json({ message: 'Google Login failed' });
+    }
+}
+
+exports.updateLogo = async (req, res) => {
+    try {
+        console.log('logo updation')
+        const { companyId } = req.params;
+        const company = await Company.findById(companyId);
+
+        if (!company) {
+            return res.status(404).json({ message: 'Company not found' });
+        }
+
+        // Check if there is an existing logo and delete it from Cloudinary
+        if (company.logo) {
+            const publicId = company.logo.split('/').pop().split('.')[0]; // Extract public ID from URL
+            await cloudinary.uploader.destroy(`company_images/${publicId}`); // Delete the image from Cloudinary
+        }
+
+        // Update the logo field with the new URL from Cloudinary
+        company.logo = req.file.path;
+
+        await company.save();
+
+        res.status(200).json({
+            message: 'Logo uploaded and updated successfully',
+            logoUrl: company.logo
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 }
 
