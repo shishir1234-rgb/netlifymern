@@ -8,19 +8,12 @@ import Cards from '../../components/cards/Cards'
 
 
 const DataCardPage = () => {
-<<<<<<< HEAD
   const message = "Business Directory Information";
   const count = "there is the detail page";
   return (
     <DarkModeProvider>
     <Header/>
     <Hero  message={message} count={count}/>
-=======
-  return (
-    <DarkModeProvider>
-    <Header/>
-    <Hero/>
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
     <DataCards/>  
     <Cards/>
     <Footer/>

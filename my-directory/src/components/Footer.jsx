@@ -35,7 +35,6 @@ const Footer = () => {
             collaboration within the Hindu community.
           </p>
           <iframe
-<<<<<<< HEAD
             title="Google Maps"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9930.592753275083!2d-0.11700726050637439!3d51.519670104601595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761b54184cd099%3A0x69e07ba678bf1378!2s80%20Long%20Ln%2C%20Barbican%2C%20London%20EC1A%209ET%2C%20UK!5e0!3m2!1sen!2sin!4v1723814894504!5m2!1sen!2sin"
             width="90%"
@@ -45,24 +44,11 @@ const Footer = () => {
             referrerPolicy="no-referrer-when-downgrade"
             className="hover:border-[5px] hover:border-transparent hover:shadow-[0_0_15px_5px_rgba(255,255,0,1),0_0_15px_5px_rgba(255,165,0,1),0_0_15px_5px_rgba(255,69,0,1)] transition-all duration-500"
           />
-=======
-  title="Google Maps"
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9930.592753275083!2d-0.11700726050637439!3d51.519670104601595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761b54184cd099%3A0x69e07ba678bf1378!2s80%20Long%20Ln%2C%20Barbican%2C%20London%20EC1A%209ET%2C%20UK!5e0!3m2!1sen!2sin!4v1723814894504!5m2!1sen!2sin"
-  width="90%"
-  style={{ border: 0, borderRadius: "10px" }}
-  allowFullScreen
-  loading="lazy"
-  referrerPolicy="no-referrer-when-downgrade"
-  className="hover:border-[5px] hover:border-transparent hover:shadow-[0_0_15px_5px_rgba(255,255,0,1),0_0_15px_5px_rgba(255,165,0,1),0_0_15px_5px_rgba(255,69,0,1)] transition-all duration-500"
-/>
-
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         </div>
 
         {/* Quick Links Section */}
         <div className="flex flex-col justify-center items-start gap-5">
           <h1 className="text-white text-xl font-semibold">Quick Links</h1>
-<<<<<<< HEAD
           <p className="text-slate-200 text-[1rem] hover:text-orange-300">
             Home
           </p>
@@ -84,21 +70,11 @@ const Footer = () => {
           <p className="text-slate-200 text-[1rem] hover:text-orange-300">
             Contact Us
           </p>
-=======
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Home</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Who We Are ?</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Popular Areas</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Trending Business Place</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Our Services</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Our Clients</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Contact Us</p>
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         </div>
 
         {/* Support Section */}
         <div className="flex flex-col justify-center items-start gap-5">
           <h1 className="text-white text-xl font-semibold">Support</h1>
-<<<<<<< HEAD
           <p className="text-slate-200 text-[1rem] hover:text-orange-300">
             Home
           </p>
@@ -114,40 +90,25 @@ const Footer = () => {
           <p className="text-slate-200 text-[1rem] hover:text-orange-300">
             Contact Us
           </p>
-=======
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Home</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Categories</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">States</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Add Listing</p>
-          <p className="text-slate-200 text-[1rem] hover:text-orange-300">Contact Us</p>
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         </div>
 
         {/* Contact Section */}
         <div className="flex flex-col justify-center items-start gap-5">
           <h1 className="text-white text-xl font-semibold">Contact Us</h1>
           <div className="flex justify-center items-center gap-3">
-<<<<<<< HEAD
             <FaBuilding
               className="text-white text-[1rem]"
               aria-label="Building"
             />
-=======
-            <FaBuilding className="text-white text-[1rem]" aria-label="Building" />
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
             <p className="text-slate-200 text-[1rem] hover:text-orange-300">
               Unit TAP.E, 80 Long Lane, London, SE1 4GT
             </p>
           </div>
           <div className="flex justify-center items-center gap-3">
             <FaMobile className="text-white text-xl" aria-label="Phone" />
-<<<<<<< HEAD
             <p className="text-slate-200 text-[1rem] hover:text-orange-300">
               +44 (0)34 5312 3505
             </p>
-=======
-            <p className="text-slate-200 text-[1rem] hover:text-orange-300">+44 (0)34 5312 3505</p>
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
           </div>
           <div className="flex justify-center items-center gap-3">
             <IoMdMail className="text-white text-xl" aria-label="Email" />
@@ -193,14 +154,10 @@ const Footer = () => {
           id="icon-box"
           className="bg-red-600 p-4 rounded-full hover:bg-black cursor-pointer fixed lg:bottom-12 bottom-6 right-6"
         >
-<<<<<<< HEAD
           <FaArrowUp
             className="text-2xl text-white"
             aria-label="Scroll to top"
           />
-=======
-          <FaArrowUp className="text-2xl text-white" aria-label="Scroll to top" />
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         </div>
       </Link>
 
@@ -208,11 +165,7 @@ const Footer = () => {
       <div>
         <button
           onClick={toggleDarkMode}
-<<<<<<< HEAD
           className="flex items-center p-4 rounded-full bg-orange-500 fixed lg:top-58 right-2 top-44 focus:outline-none z-50"
-=======
-          className="flex items-center p-4 rounded-full bg-orange-500 fixed lg:top-58 right-2 top-32 focus:outline-none z-50"
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         >
           {darkMode ? (
             <FaMoon size={25} className="text-black" aria-label="Dark mode" />

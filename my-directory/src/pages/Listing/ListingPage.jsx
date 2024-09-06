@@ -9,7 +9,6 @@ const ListingPage = () => {
   return (
     <>
         <DarkModeProvider>
-
      <Header/> 
      <Hero/>
      <ListingInput/>

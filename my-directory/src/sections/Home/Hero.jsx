@@ -16,11 +16,7 @@ const Hero = () => {
     });
   }, []);
 
-<<<<<<< HEAD
   const { darkMode, toggleDarkMode } = useDarkMode();
-=======
-  const { darkMode,toggleDarkMode  } = useDarkMode();
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
 
   return (
     <>
@@ -53,34 +49,19 @@ const Hero = () => {
           >
             Elevate Your Business in the Hindu Community
           </p>
-<<<<<<< HEAD
           
           <SearchBar />
-=======
-          <SearchBar/>
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         </section>
       </div>
 
       {/* Foggy Image */}
       <img
-<<<<<<< HEAD
         className="w-full -mt-[12px] sm:-mt-[25px] lg:-mt-[35px] xl:-mt-[45px] 2xl:-mt-[55px] relative z-[10] filter invert brightness-0"
         src={foggyimg}
         alt="Foggy effect"
       />
       
       {/* Form */}
-=======
-  className="w-full -mt-[12px] sm:-mt-[25px] lg:-mt-[35px] xl:-mt-[45px] 2xl:-mt-[55px] relative z-10 filter invert brightness-0"
-  src={foggyimg}
-  alt="Foggy effect"
-/>
-
-
-
-      {/* Form start from here */}
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
       <div>
         {/* Your form content */}
       </div>

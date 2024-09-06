@@ -21,11 +21,7 @@ const Login = () => {
     setError(null); // Clear any previous error messages
 
     try {
-<<<<<<< HEAD
       const response = await axios.post("https://hindu-backend.onrender.com/public/admin/adminLogin", {
-=======
-      const response = await axios.post("http://localhost:4000/public/admin/adminLogin", {
->>>>>>> f15109cd11a472ae7ea9b5343914f090e9543825
         email: username,
         adminPassword: password,
       });

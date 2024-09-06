@@ -81,7 +81,7 @@ exports.adminLogin = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ adminId: admin?._id?.toString() }, process.env.seckret_Key, { expiresIn: '1h' });
+    const token = jwt.sign({ adminId: admin?._id?.toString() }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
     req.session.user = { id: admin._id, email: admin.email };
     console.log('Session set:', req.session.user);

@@ -26,7 +26,7 @@ exports.authenticateJWT = (req, res, next) => {
     const token = bearer[1];
     console.log('Token:', token);
 
-    jwt.verify(token, process.env.seckret_Key, (err, user) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
         if (err) {
             console.error('JWT verification error:', err);
             return res.status(403).json({ message: 'Authentication failed: Invalid token' });

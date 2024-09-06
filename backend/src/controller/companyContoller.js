@@ -134,7 +134,7 @@ exports.compRegister = async (req, res, next) => {
 
 exports.compListing = async (req, res) => {
     console.log('listing...');
-    
+
     const {
         firstName, lastName, compName, email, compPassword, category, contactNo,
         address, state, pincode, country, place_Map_url, discription, videoURL,
@@ -208,10 +208,10 @@ exports.compListing = async (req, res) => {
         console.log('Mail data:', emailTemplateData);
 
         const templateFilePath = "../views/userInvitation.ejs";
-        const success = await sendNoticeEmail(email, emailTemplateData, templateFilePath);
-        if (!success) {
-            throw new Error('Failed to send email');
-        }
+        // const success = await sendNoticeEmail(email, emailTemplateData, templateFilePath);
+        // if (!success) {
+        //     throw new Error('Failed to send email');
+        // }
 
         res.status(201).json({ message: 'Company updated successfully', details: existingCompany });
     } catch (err) {
@@ -252,7 +252,7 @@ exports.compLogin = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ companyId: company._id }, process.env.seckret_Key, { expiresIn: '1h' });
+        const token = jwt.sign({ companyId: company._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
         // Save user session
         req.session.user = { id: company._id, email: company.email };
         // console.log('Session set:', req.session.user);  // Add this line for debugging
@@ -571,26 +571,62 @@ exports.getTopRatedCompaniesReviews = async (req, res) => {
 };
 
 // upload image of company
+// exports.uploadCompImage = async (req, res) => {
+//     try {
+//         const company = await Company.findById(req.params.id);
+//         if (!company) {
+//             return res.status(404).json({ message: 'Company not found' });
+//         }
+//         // Check if files are uploaded
+//         if (!req.files || req.files.length === 0) {
+//             return res.status(400).json({ message: 'No images uploaded' });
+//         }
+
+//         // Update company with new images
+//         company.image = req.files.map(file => file.path); // Save file paths in 'images' field
+//         await company.save();;
+
+//         res.status(200).json({ message: 'Image uploaded successfully', data: company });
+//     } catch (error) {
+//         res.status(500).json({ message: 'An error occurred', error });
+//     }
+// };
 exports.uploadCompImage = async (req, res) => {
     try {
+        console.log("Request URL:", req.originalUrl);  // Check the full request URL
+        console.log("Request Params:", req.params);    // Log request params
+        const isValidObjectId = mongoose.Types.ObjectId.isValid(req.params.id);
+        if (!isValidObjectId) {
+            return res.status(400).json({ message: 'Invalid company ID' });
+        }
+        
         const company = await Company.findById(req.params.id);
         if (!company) {
             return res.status(404).json({ message: 'Company not found' });
         }
+
         // Check if files are uploaded
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({ message: 'No images uploaded' });
         }
 
-        // Update company with new images
-        company.image = req.files.map(file => file.path); // Save file paths in 'images' field
-        await company.save();;
+        // Upload each image to Cloudinary and update company with new images
+        const imageUrls = [];
+        for (const file of req.files) {
+            const imageUpload = await cloudinary.uploader.upload(file.path, { folder: 'company_images' });
+            imageUrls.push(imageUpload.secure_url);
+        }
 
-        res.status(200).json({ message: 'Image uploaded successfully', data: company });
+        company.image = imageUrls; // Save image URLs to the company record
+        await company.save();
+
+        res.status(200).json({ message: 'Images uploaded successfully', data: company });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'An error occurred', error });
     }
 };
+
 
 // upload video url of company
 exports.uploadCompUrl = async (req, res) => {
